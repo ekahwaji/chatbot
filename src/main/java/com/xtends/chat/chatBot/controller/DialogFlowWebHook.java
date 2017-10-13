@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.xtends.chat.chatBot.model.AIWebhookRequest;
 
 import ai.api.GsonFactory;
+import ai.api.model.Fulfillment;
 
 @RestController
 @RequestMapping("/dialogFlow")
@@ -32,7 +33,7 @@ public class DialogFlowWebHook {
 	private final Gson gson = GsonFactory.getDefaultFactory().getGson();
 	
 	@PostMapping(value="/webhook",produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> doWebHook(HttpServletRequest request) throws Exception {
+	public ResponseEntity<Fulfillment> doWebHook(HttpServletRequest request) throws Exception {
 		AIWebhookRequest input = gson.fromJson(request.getReader(), AIWebhookRequest.class);
 		HttpGet httpGet = new HttpGet("http://api.population.io:80/1.0/population/" + getValue(input,"year")+ "/"
 				+ getValue(input,"geo-country") + "/" + getValue(input,"age") );
@@ -44,8 +45,10 @@ public class DialogFlowWebHook {
 
 		String result = EntityUtils.toString(entity);
 		logger.info(result);
+		Fulfillment output = new Fulfillment();
+		output.setSpeech(result);
 
-		return new ResponseEntity<String>(result,HttpStatus.OK);
+		return new ResponseEntity<Fulfillment>(output,HttpStatus.OK);
 	}
 	
 	
