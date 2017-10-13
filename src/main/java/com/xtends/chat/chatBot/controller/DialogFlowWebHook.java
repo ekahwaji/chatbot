@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +25,7 @@ public class DialogFlowWebHook {
 	//private final Gson gson = GsonFactory.getDefaultFactory().getGson();
 	
 	@PostMapping(value="/webhook",produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> doWebHook(AIWebhookRequest input) throws Exception {
+	public ResponseEntity<String> doWebHook(@RequestBody AIWebhookRequest input) throws Exception {
 		
 		HttpGet httpGet = new HttpGet("http://api.population.io:80/1.0/population/" + getValue(input,"year")+ "/"
 				+ getValue(input,"geo-country") + "/" + getValue(input,"age") );
