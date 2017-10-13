@@ -1,7 +1,5 @@
 package com.xtends.chat.chatBot.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -12,26 +10,21 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
 import com.xtends.chat.chatBot.model.AIWebhookRequest;
-
-import ai.api.GsonFactory;
 
 @RestController
 @RequestMapping("/dialogFlow")
 public class DialogFlowWebHook {
 
 	private HttpClient httpClient = HttpClients.createDefault();
-	private final Gson gson = GsonFactory.getDefaultFactory().getGson();
+	//private final Gson gson = GsonFactory.getDefaultFactory().getGson();
 	
-	@GetMapping(value="/webhook",produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> doWebHook(HttpServletRequest request) throws Exception {
-		
-		AIWebhookRequest input = gson.fromJson(request.getReader(), AIWebhookRequest.class);
+	@PostMapping(value="/webhook",produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> doWebHook(AIWebhookRequest input) throws Exception {
 		
 		HttpGet httpGet = new HttpGet("http://api.population.io:80/1.0/population/" + getValue(input,"year")+ "/"
 				+ getValue(input,"geo-country") + "/" + getValue(input,"age") );
