@@ -7,6 +7,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import com.xtends.chat.chatBot.model.AIWebhookRequest;
 @RequestMapping("/dialogFlow")
 public class DialogFlowWebHook {
 
+	private Logger logger = LoggerFactory.getLogger(DialogFlowWebHook.class);
 	private HttpClient httpClient = HttpClients.createDefault();
 	//private final Gson gson = GsonFactory.getDefaultFactory().getGson();
 	
@@ -36,6 +39,8 @@ public class DialogFlowWebHook {
 		HttpEntity entity = httpResponse.getEntity();
 
 		String result = EntityUtils.toString(entity);
+		
+		logger.trace(result);
 
 		return new ResponseEntity<String>(result,HttpStatus.OK);
 	}
