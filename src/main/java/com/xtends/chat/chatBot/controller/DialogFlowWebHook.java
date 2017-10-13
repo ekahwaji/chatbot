@@ -43,8 +43,7 @@ public class DialogFlowWebHook {
 		HttpEntity entity = httpResponse.getEntity();
 
 		String result = EntityUtils.toString(entity);
-		
-		logger.trace(result);
+		logger.info(result);
 
 		return new ResponseEntity<String>(result,HttpStatus.OK);
 	}
