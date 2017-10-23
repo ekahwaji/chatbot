@@ -45,8 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 		   .authorizeRequests()
 		   .antMatchers(HttpMethod.POST, "/dialogFlow/**")
-		   .access("isAuthenticated() AND hasRole('ROLE_CHAT')")
+		   .access("hasRole('ROLE_CHAT')")
 		   .and()
+		   .csrf().disable()
 		   .exceptionHandling().authenticationEntryPoint(new BasicAuthenticationEntryPoint())
 		   .and()
 		   .addFilterAt(securityFilter(), BasicAuthenticationFilter.class);
