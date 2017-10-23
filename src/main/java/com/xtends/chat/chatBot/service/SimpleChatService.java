@@ -28,6 +28,8 @@ public class SimpleChatService {
 		if (sessionId != null) {
 			context = AIServiceContextBuilder.buildFromSessionId(sessionId);
 		}
+		
+		
 
 		if (context != null) {
 			return aiDataService.request(aiRequest, context);
