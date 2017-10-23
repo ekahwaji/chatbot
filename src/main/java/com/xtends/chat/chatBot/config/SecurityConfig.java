@@ -50,6 +50,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		   .exceptionHandling().authenticationEntryPoint(new BasicAuthenticationEntryPoint())
 		   .and()
 		   .addFilterAt(securityFilter(), BasicAuthenticationFilter.class);
-		   
 	}
 }
