@@ -45,7 +45,7 @@ public class DialogFlowWebHook {
 
 	@PostMapping(value = "/webhook", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Fulfillment> doWebHook(HttpServletRequest request) throws Exception {
-		/*AIWebhookRequest input = gson.fromJson(request.getReader(), AIWebhookRequest.class);
+		/*
 		HttpGet httpGet = new HttpGet("http://api.population.io:80/1.0/population/" + getValue(input, "year") + "/"
 				+ getValue(input, "geo-country") + "/" + getValue(input, "age"));
 		httpGet.setHeader(HttpHeaders.ACCEPT, "application/json");
@@ -53,7 +53,8 @@ public class DialogFlowWebHook {
 		HttpResponse httpResponse = httpClient.execute(httpGet);
 
 		HttpEntity entity = httpResponse.getEntity();*/
-
+		AIWebhookRequest input = gson.fromJson(request.getReader(), AIWebhookRequest.class);
+		logger.info(input.toString());
 		String result =getAccounts();
 		logger.info(result);
 		Fulfillment output = new Fulfillment();
