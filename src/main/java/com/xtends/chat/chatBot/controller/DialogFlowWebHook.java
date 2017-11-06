@@ -4,17 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.xtends.chat.chatBot.model.AIWebhookRequest;
@@ -54,13 +52,55 @@ public class DialogFlowWebHook {
 
 		HttpEntity entity = httpResponse.getEntity();*/
 		AIWebhookRequest input = gson.fromJson(request.getReader(), AIWebhookRequest.class);
+		String action = input.getResult().getAction();
+		String result = "";
 		logger.info(input.toString());
-		String result =getAccounts();
-		logger.info(result);
+		if("process_accounts".equals(action))
+		{
+			
+			result =getAccounts();
+			logger.info(result);
+		}
+		else if("category_spending".equals(action))
+		{
+			String category = input.getResult().getStringParameter("category");
+			result = getCategorySpending(category);
+		}
+		
 		Fulfillment output = new Fulfillment();
 		output.setSpeech(result);
 
 		return new ResponseEntity<Fulfillment>(output, HttpStatus.OK);
+	}
+	
+	private String getCategorySpending(String categoryName)
+	{
+		Map<String,String> result = new HashMap<String,String>();
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String resultStr = "{}";
+		try {
+			 
+			if("shopping".equals(categoryName.toLowerCase()))
+			{
+				result.put("amount", "200$");
+			}
+			else if("groceries".equals(categoryName.toLowerCase()))
+			{
+				result.put("amount", "600$");
+			}
+			else
+			{
+				result.put("amount", "0$");
+				result.put("message", "no amount found from "+categoryName+" ");
+			}
+			
+			resultStr = mapper.writeValueAsString(result);
+		} catch (JsonProcessingException e) {
+			logger.error("Error in getting category spending",e);
+		}
+		
+		return resultStr;
 	}
 
 	private String getAccounts() {
