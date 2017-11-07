@@ -144,7 +144,8 @@ public class DialogFlowWebHook {
 			
 			ObjectMapper mapper = new ObjectMapper();
 			result = mapper.writeValueAsString(transactions);
-
+			logger.info("after");
+			logger.info(result);
 		} catch (Exception e) {
 			logger.error("Error in getting transactions by period["+data+"]",e);
 		}
