@@ -132,12 +132,12 @@ public class DialogFlowWebHook {
 			{
 				transaction = new Transaction();
 				transaction.setRefNumber(i+"");
-				transaction.setAmount(round(ThreadLocalRandom.current().nextDouble(10, 300)));
+				//transaction.setAmount(round(ThreadLocalRandom.current().nextDouble(10, 300)));
 				transaction.setFromAccountNumber(getAccountNumber());
 				transaction.setToAccountNumber(getAccountNumber());
 				date = getDate(from, to);
 				transaction.setTransactionDate(dateFormat.format(date));
-				transaction.setValueDate(dateFormat.format(date));
+				//transaction.setValueDate(dateFormat.format(date));
 				transactions.add(transaction);
 			}
 			
