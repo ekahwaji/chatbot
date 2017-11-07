@@ -63,7 +63,5 @@ public class Transaction {
 				+ toAccountNumber + ", amount=" + amount + ", transactionDate=" + transactionDate + ", valueDate="
 				+ valueDate + "]";
 	}
-	
-	
 
 }

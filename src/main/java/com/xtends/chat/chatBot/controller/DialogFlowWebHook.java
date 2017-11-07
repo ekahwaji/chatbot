@@ -125,23 +125,23 @@ public class DialogFlowWebHook {
 			Date to   = dateFormat.parse(periode[1]);
 			
 			
-			List<Transaction> transactions = new ArrayList<Transaction>();
-			Transaction transaction = null;
+			List<Map<String,Object>> transactions = new ArrayList<Map<String,Object>>();
+			
 			Date date = null;
+			Map<String,Object> transactionMap = null;
 			for(int i=0;i<5;i++)
 			{
-				transaction = new Transaction();
-				transaction.setRefNumber(i+"");
-				//transaction.setAmount(round(ThreadLocalRandom.current().nextDouble(10, 300)));
-				transaction.setFromAccountNumber(getAccountNumber());
-				transaction.setToAccountNumber(getAccountNumber());
+				transactionMap = new HashMap<>();
+				transactionMap.put("refNumber", i);
+				transactionMap.put("fromAccountNumber", getAccountNumber());
+				transactionMap.put("toAccountNumber", getAccountNumber());
 				date = getDate(from, to);
-				transaction.setTransactionDate(dateFormat.format(date));
-				//transaction.setValueDate(dateFormat.format(date));
-				transactions.add(transaction);
+				transactionMap.put("trxDate", dateFormat.format(date));
+				transactionMap.put("valueDate", dateFormat.format(date));
+				transactions.add(transactionMap);
 			}
 			
-			logger.info(transactions.toString());
+			//logger.info(transactions.toString());
 			
 			ObjectMapper mapper = new ObjectMapper();
 			result = mapper.writeValueAsString(transactions);
