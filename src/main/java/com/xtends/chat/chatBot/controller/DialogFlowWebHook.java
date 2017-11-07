@@ -117,7 +117,7 @@ public class DialogFlowWebHook {
 	private String getTransactionsByPeriode(String data)
 	{
 		String[] periode = data.split("/");
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String result = null;
 		try {
 			Date from = dateFormat.parse(periode[0]);
