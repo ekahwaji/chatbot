@@ -130,7 +130,7 @@ public class DialogFlowWebHook {
 			for(int i=0;i<5;i++)
 			{
 				transaction = new Transaction();
-				transaction.setRefNumber(UUID.randomUUID().toString());
+				transaction.setRefNumber(i+"");
 				transaction.setAmount(round(ThreadLocalRandom.current().nextDouble(10, 300)));
 				transaction.setFromAccountNumber(getAccountNumber());
 				transaction.setToAccountNumber(getAccountNumber());
