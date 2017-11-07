@@ -80,6 +80,7 @@ public class DialogFlowWebHook {
 		
 		Fulfillment output = new Fulfillment();
 		output.setSpeech(result);
+        logger.info("speech {}",output.getSpeech());
 
 		return new ResponseEntity<Fulfillment>(output, HttpStatus.OK);
 	}
