@@ -57,4 +57,13 @@ public class Transaction {
 		this.valueDate = valueDate;
 	}
 
+	@Override
+	public String toString() {
+		return "Transaction [refNumber=" + refNumber + ", fromAccountNumber=" + fromAccountNumber + ", toAccountNumber="
+				+ toAccountNumber + ", amount=" + amount + ", transactionDate=" + transactionDate + ", valueDate="
+				+ valueDate + "]";
+	}
+	
+	
+
 }

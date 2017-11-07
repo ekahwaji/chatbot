@@ -140,6 +140,8 @@ public class DialogFlowWebHook {
 				transactions.add(transaction);
 			}
 			
+			logger.info(transactions.toString());
+			
 			ObjectMapper mapper = new ObjectMapper();
 			result = mapper.writeValueAsString(transactions);
 
