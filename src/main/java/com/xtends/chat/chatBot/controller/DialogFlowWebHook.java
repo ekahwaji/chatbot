@@ -3,10 +3,13 @@ package com.xtends.chat.chatBot.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,6 +31,7 @@ import com.xtends.chat.chatBot.model.AIWebhookRequest;
 import com.xtends.chat.chatBot.model.Account;
 import com.xtends.chat.chatBot.model.AccountType;
 import com.xtends.chat.chatBot.model.Currency;
+import com.xtends.chat.chatBot.model.Transaction;
 
 import ai.api.GsonFactory;
 import ai.api.model.Fulfillment;
@@ -56,6 +60,7 @@ public class DialogFlowWebHook {
 		String result = "";
 		logger.info(input.toString());
 		logger.info("parameters {} ",input.getResult().getParameters());
+		
 		if("process_accounts".equals(action))
 		{
 			
@@ -66,6 +71,11 @@ public class DialogFlowWebHook {
 		{
 			String category = input.getResult().getStringParameter("category");
 			result = getCategorySpending(category);
+		}
+		else if("transactions_action".equals(action))
+		{
+			String periode = input.getResult().getStringParameter("date-period");
+			result = getTransactionsByPeriode(periode);
 		}
 		
 		Fulfillment output = new Fulfillment();
@@ -102,6 +112,74 @@ public class DialogFlowWebHook {
 		}
 		
 		return resultStr;
+	}
+	
+	private String getTransactionsByPeriode(String data)
+	{
+		String[] periode = data.split("/");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
+		String result = null;
+		try {
+			Date from = dateFormat.parse(periode[0]);
+			Date to   = dateFormat.parse(periode[1]);
+			
+			
+			List<Transaction> transactions = new ArrayList<Transaction>();
+			Transaction transaction = null;
+			Date date = null;
+			for(int i=0;i<5;i++)
+			{
+				transaction = new Transaction();
+				transaction.setRefNumber(UUID.randomUUID().toString());
+				transaction.setAmount(ThreadLocalRandom.current().nextDouble(10, 300));
+				transaction.setFromAccountNumber(getAccountNumber());
+				transaction.setToAccountNumber(getAccountNumber());
+				date = getDate(from, to);
+				transaction.setTransactionDate(dateFormat.format(date));
+				transaction.setValueDate(dateFormat.format(date));
+				transactions.add(transaction);
+			}
+			
+			ObjectMapper mapper = new ObjectMapper();
+			result = mapper.writeValueAsString(transactions);
+
+		} catch (Exception e) {
+			logger.error("Error in getting transactions by period["+data+"]",e);
+		}
+
+		return result;
+	}
+	
+	public static Date getDate(Date from, Date to) {
+
+        int days = ThreadLocalRandom.current().nextInt(1, 15);
+
+		Calendar calendar  = Calendar.getInstance();
+		
+        if(days<6)
+        {
+        	calendar.setTime(from);
+        	calendar.add(Calendar.DATE, days);
+        }
+        else
+        {
+        	calendar.setTime(to);
+        	calendar.add(Calendar.DATE, -days);
+        }
+        
+        return calendar.getTime();
+    }
+	
+	public static String getAccountNumber()
+	{
+		String accountNumber = "";
+		
+		for(int i=0;i<15;i++)
+		{
+			accountNumber+=ThreadLocalRandom.current().nextInt(0, 9);
+		}
+		
+		return accountNumber;
 	}
 
 	private String getAccounts() {
