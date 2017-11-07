@@ -55,6 +55,7 @@ public class DialogFlowWebHook {
 		String action = input.getResult().getAction();
 		String result = "";
 		logger.info(input.toString());
+		logger.info("parameters {} ",input.getResult().getParameters());
 		if("process_accounts".equals(action))
 		{
 			
